@@ -4,6 +4,7 @@ package com.learnhub.employeeapp.controller;
 import com.learnhub.employeeapp.model.Employee;
 import com.learnhub.employeeapp.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 @RequestMapping("/employees")
 public class EmployeeController {
 
+    @Qualifier("employeeServiceImpl")
     @Autowired
     EmployeeService employeeService;
 

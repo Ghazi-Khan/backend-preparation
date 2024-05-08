@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@JsonIgnoreProperties({"email"})
+//@JsonIgnoreProperties({"email"})
 public class Employee {
     private String employeeId;
     private String firstName;

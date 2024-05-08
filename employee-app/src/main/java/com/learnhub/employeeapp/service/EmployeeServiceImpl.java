@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -23,5 +24,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         employees.add(employee);
         return employee;
+    }
+
+    @Override
+    public List<Employee> getAllEmployees() {
+        return employees;
+    }
+
+    @Override
+    public Employee getEmployeeById(String employeeId) {
+        return employees.stream()
+                .filter(employee -> employee.getEmployeeId().equals(employeeId))
+                .findFirst()
+                .orElse(null);
     }
 }

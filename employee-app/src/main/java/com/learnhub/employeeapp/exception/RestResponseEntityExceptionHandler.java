@@ -1,7 +1,7 @@
 package com.learnhub.employeeapp.exception;
 
 
-import com.learnhub.employeeapp.model.Error;
+import com.learnhub.employeeapp.model.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,8 +14,8 @@ public class RestResponseEntityExceptionHandler {
     @ExceptionHandler(EmployeeNotFoundException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Error employeeNotFoundHandler(EmployeeNotFoundException employeeNotFoundException) {
-        return new Error(
+    public ErrorMessage employeeNotFoundHandler(EmployeeNotFoundException employeeNotFoundException) {
+        return new ErrorMessage(
                 HttpStatus.NOT_FOUND,
                 employeeNotFoundException.getMessage()
         );

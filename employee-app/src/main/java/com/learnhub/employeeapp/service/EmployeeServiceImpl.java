@@ -39,7 +39,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .findFirst()
                 .orElseThrow(
                         () -> new EmployeeNotFoundException(
-                                "Employee not found with id + " + employeeId
+                                "Employee not found with id: " + employeeId
                         )
                 );
     }

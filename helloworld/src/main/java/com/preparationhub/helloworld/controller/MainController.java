@@ -2,10 +2,9 @@ package com.preparationhub.helloworld.controller;
 
 import com.preparationhub.helloworld.model.User;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @Controller
 @ResponseBody
@@ -35,5 +34,20 @@ public class MainController {
     @GetMapping("/user/{myId}")
     String pathVariableExample2(@PathVariable("myId") String id) {
         return "The path variable is => " + id;
+    }
+
+    @GetMapping("/request-param1")
+    public String requestParamsExample1(
+            @RequestParam String name,
+            @RequestParam(name = "email", required = false, defaultValue = "") String emailId
+    ) {
+        return "the request param name => " + name + " email is " + emailId;
+    }
+
+    @GetMapping("/")
+    public String requestParamsExample2(
+            @RequestParam Map<String, String> params
+            ) {
+        return "request params are - " + params;
     }
 }

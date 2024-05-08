@@ -20,4 +20,15 @@ public class RestResponseEntityExceptionHandler {
                 employeeNotFoundException.getMessage()
         );
     }
+
+
+    @ExceptionHandler(Exception.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorMessage genericExceptionHandler(Exception exception) {
+        return new ErrorMessage(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                exception.getMessage()
+        );
+    }
 }

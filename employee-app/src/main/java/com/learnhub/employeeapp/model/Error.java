@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.http.HttpStatusCode;
+import org.springframework.http.HttpStatus;
 
 
 @NoArgsConstructor
@@ -12,6 +12,6 @@ import org.springframework.http.HttpStatusCode;
 @Getter
 @Setter
 public class Error {
-    private HttpStatusCode statusCode;
+    private HttpStatus statusCode;
     private String errorMessage;
 }

@@ -18,10 +18,7 @@ public class EmployeeV2Controller {
     @Autowired
     EmployeeService employeeService;
 
-//    This controller is just to demonstrate
-//    the concept of api versioning
     @PostMapping
-    public Employee save(@RequestBody Employee employee) {
-        return employeeService.save(employee);
+    public Employee save(@RequestBody Employee employee) { return employeeService.save(employee);
     }
 }

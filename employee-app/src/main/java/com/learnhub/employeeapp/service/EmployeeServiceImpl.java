@@ -17,10 +17,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee save(Employee employee) {
 
-        Predicate<Employee> doesEmployeeExistsEmployeePredicate =
+        Predicate<Employee> doesEmployeeIdExistsPredicate =
                 e -> e.getEmployeeId() != null && !e.getEmployeeId().isEmpty();
 
-        if (!doesEmployeeExistsEmployeePredicate.test(employee)) {
+        if (!doesEmployeeIdExistsPredicate.test(employee)) {
             employee.setEmployeeId(UUID.randomUUID().toString());
         }
         employees.add(employee);

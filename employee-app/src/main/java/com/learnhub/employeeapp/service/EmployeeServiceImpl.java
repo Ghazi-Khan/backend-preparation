@@ -1,5 +1,6 @@
 package com.learnhub.employeeapp.service;
 
+import com.learnhub.employeeapp.exception.EmployeeNotFoundException;
 import com.learnhub.employeeapp.model.Employee;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employees.stream()
                 .filter(employee -> employee.getEmployeeId().equals(employeeId))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(
+                        () -> new EmployeeNotFoundException(
+                                "Employee not found with id + " + employeeId
+                        )
+                );
     }
 }

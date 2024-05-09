@@ -23,7 +23,6 @@ public class EmployeeEntity {
     private String firstName;
     private String lastName;
     private String email;
-
     @CreationTimestamp
     private Instant createdOn;
 }

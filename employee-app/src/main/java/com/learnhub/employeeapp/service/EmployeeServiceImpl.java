@@ -6,13 +6,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Predicate;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-
     List<Employee> employees = new ArrayList<>();
     @Override
     public Employee save(Employee employee) {
@@ -46,13 +44,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public String deleteEmployeeById(String employeeId) {
-
         Employee employeeObj = employees
                 .stream()
                 .filter(employee -> employee.getEmployeeId().equals(employeeId))
                 .findFirst()
                 .get();
-
         employees.remove(employeeObj);
         return "Employee with id " + employeeId + " deleted successfully";
     }

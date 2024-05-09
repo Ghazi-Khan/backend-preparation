@@ -12,14 +12,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @Service
-public class EmployeeV2ServiceImpl implements EmployeeService{
-
-
+public class EmployeeV2ServiceImpl implements EmployeeService {
     @Autowired
     EmployeeRepository employeeRepository;
+
     @Override
     public Employee save(Employee employee) {
         Predicate<Employee> doesEmployeeIdExistsPredicate =
@@ -51,7 +49,6 @@ public class EmployeeV2ServiceImpl implements EmployeeService{
                 .toList();
 
     }
-
     @Override
     public Employee getEmployeeById(String employeeId) {
         Optional<EmployeeEntity> employeeEntityOptional =
@@ -59,14 +56,13 @@ public class EmployeeV2ServiceImpl implements EmployeeService{
 
         employeeEntityOptional
                 .orElseThrow(
-                        () -> new EmployeeNotFoundException("Employee not found with id : " + employeeId )
+                        () -> new EmployeeNotFoundException("Employee not found with id : " + employeeId)
                 );
 
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeEntityOptional.get(), employee);
         return employee;
     }
-
     @Override
     public String deleteEmployeeById(String employeeId) {
         employeeRepository.deleteById(employeeId);

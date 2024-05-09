@@ -1,4 +1,4 @@
-package com.silkroutestore.Product;
+package com.silkroutestore.product;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

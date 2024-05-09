@@ -1,16 +1,14 @@
 package com.silkroutestore.product.service;
 
 import com.silkroutestore.product.entity.Product;
+import com.silkroutestore.product.exception.ProductServiceCustomException;
 import com.silkroutestore.product.model.ProductRequest;
 import com.silkroutestore.product.model.ProductResponse;
 import com.silkroutestore.product.repository.ProductRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @Log4j2
@@ -41,8 +39,9 @@ public class ProductServiceImpl implements ProductService {
         Product product =
                 productRepository
                         .findById(productId)
-                        .orElseThrow(()-> new RuntimeException(
-                                "product not found with id: " + productId
+                        .orElseThrow(()-> new ProductServiceCustomException(
+                                "product not found with id: " + productId,
+                                "PRODUCT_NOT_FOUND"
                         ));
 
         ProductResponse productResponse =

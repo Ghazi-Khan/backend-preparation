@@ -1,6 +1,7 @@
 package com.silkroutestore.order.service;
 
 import com.silkroutestore.order.entity.Order;
+import com.silkroutestore.order.external.client.ProductService;
 import com.silkroutestore.order.model.OrderRequest;
 import com.silkroutestore.order.repository.OrderRepository;
 import lombok.extern.log4j.Log4j2;
@@ -15,6 +16,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     OrderRepository orderRepository;
+
+    @Autowired
+    ProductService productService;
     @Override
     public long placeOrder(OrderRequest orderRequest) {
 //        Code flow
@@ -23,6 +27,13 @@ public class OrderServiceImpl implements OrderService {
 //        Payment Service -> Payments -> Success -> Completed else Cancelled
 
         log.info("placing the oder request {} ", orderRequest);
+
+        productService.reduceQuantity(
+                orderRequest.getProductId(),
+                orderRequest.getQuantity()
+        );
+
+        log.info("creating order with status CREATED");
 
         Order order = Order
                 .builder()
@@ -36,6 +47,6 @@ public class OrderServiceImpl implements OrderService {
         order = orderRepository.save(order);
 
         log.info("order placed successfully with order id: " + order.getId());
-        return 0;
+        return order.getId();
     }
 }

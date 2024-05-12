@@ -59,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
                         .amount(orderRequest.getTotalAmount())
                         .build();
 
-        String paymentStatus = null;
+        String paymentStatus;
 
         try {
             paymentService.doPayment(paymentRequest);

@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "PAYMENT-SERVICE/payment")
 public interface PaymentService {
     @PostMapping
-    public ResponseEntity<Long> doPayment(@RequestBody PaymentRequest paymentRequest);
+    ResponseEntity<Long> doPayment(@RequestBody PaymentRequest paymentRequest);
 }

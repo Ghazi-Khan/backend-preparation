@@ -1,6 +1,5 @@
 package com.silkroutestore.order.entity;
 
-import jakarta.annotation.Generated;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,7 +1,9 @@
 package com.silkroutestore.order.service;
 
 import com.silkroutestore.order.entity.Order;
+import com.silkroutestore.order.external.client.PaymentService;
 import com.silkroutestore.order.external.client.ProductService;
+import com.silkroutestore.order.external.request.PaymentRequest;
 import com.silkroutestore.order.model.OrderRequest;
 import com.silkroutestore.order.repository.OrderRepository;
 import lombok.extern.log4j.Log4j2;
@@ -16,9 +18,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     OrderRepository orderRepository;
-
     @Autowired
     ProductService productService;
+    @Autowired
+    PaymentService paymentService;
+
     @Override
     public long placeOrder(OrderRequest orderRequest) {
 //        Code flow
@@ -46,7 +50,29 @@ public class OrderServiceImpl implements OrderService {
 
         order = orderRepository.save(order);
 
-        log.info("order placed successfully with order id: " + order.getId());
+        log.info("Calling payment service to complete the payment");
+        PaymentRequest paymentRequest =
+                PaymentRequest
+                        .builder()
+                        .orderId(order.getId())
+                        .paymentMode(orderRequest.getPaymentMode())
+                        .amount(orderRequest.getTotalAmount())
+                        .build();
+
+        String paymentStatus = null;
+
+        try {
+            paymentService.doPayment(paymentRequest);
+            log.info("Payment done successfully, changing order status to PLACED");
+            paymentStatus = "PLACED";
+        } catch (Exception e) {
+            log.info("Error occurred in payment, changing status to FAILED");
+            paymentStatus = "FAILED";
+        }
+        order.setOrderStatus(paymentStatus);
+        orderRepository.save(order);
+
+        log.info("order placed successfully with order id: {}", order.getId());
         return order.getId();
     }
 }

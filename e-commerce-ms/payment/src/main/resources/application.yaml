@@ -1,0 +1,29 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: PAYMENT-SERVICE
+  config:
+    import: configserver:http://localhost:9296
+  datasource:
+    password: admin
+    username: admin
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:~/h2/payment_db;DB_CLOSE_ON_EXIT=FALSE
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+
+management:
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+
+logging:
+  pattern:
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'

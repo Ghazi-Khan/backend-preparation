@@ -4,6 +4,7 @@ import com.silkroutestore.order.entity.Order;
 import com.silkroutestore.order.exception.CustomException;
 import com.silkroutestore.order.external.client.PaymentService;
 import com.silkroutestore.order.external.client.ProductService;
+import com.silkroutestore.order.external.reponse.ProductResponse;
 import com.silkroutestore.order.external.request.PaymentRequest;
 import com.silkroutestore.order.model.OrderRequest;
 import com.silkroutestore.order.model.OrderResponse;
@@ -12,6 +13,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 
@@ -25,6 +27,8 @@ public class OrderServiceImpl implements OrderService {
     ProductService productService;
     @Autowired
     PaymentService paymentService;
+    @Autowired
+    RestTemplate restTemplate;
 
     @Override
     public long placeOrder(OrderRequest orderRequest) {
@@ -81,6 +85,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponse getOrderDetails(long orderId) {
+        log.info("Get order details for the orderId {} ", orderId);
         Order order =
                 orderRepository
                         .findById(orderId)
@@ -89,6 +94,25 @@ public class OrderServiceImpl implements OrderService {
                                 "ORDER_NOT_FOUND",
                                 HttpStatus.NOT_FOUND.value()
                         ));
+
+        log.info("Invoking product -service to fetch product for id {} ", order.getProductId());
+
+        ProductResponse productResponse =
+                restTemplate.getForObject(
+                        "http://PRODUCT-SERVICE/product/"+ order.getProductId(),
+                        ProductResponse.class
+                );
+
+        OrderResponse.ProductDetails productDetails =
+                OrderResponse
+                        .ProductDetails
+                        .builder()
+                        .id(productResponse.getId())
+                        .name(productResponse.getName())
+                        .price(productResponse.getPrice())
+                        .quantity(productResponse.getQuantity())
+                        .build();
+
         return
                 OrderResponse
                         .builder()
@@ -96,6 +120,7 @@ public class OrderServiceImpl implements OrderService {
                         .orderDate(order.getOrderDate())
                         .amount(order.getAmount())
                         .orderStatus(order.getOrderStatus())
+                        .productDetails(productDetails)
                         .build();
     }
 }

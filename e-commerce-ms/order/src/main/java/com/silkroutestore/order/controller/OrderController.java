@@ -2,6 +2,7 @@ package com.silkroutestore.order.controller;
 
 
 import com.silkroutestore.order.model.OrderRequest;
+import com.silkroutestore.order.model.OrderResponse;
 import com.silkroutestore.order.service.OrderService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +25,16 @@ public class OrderController {
                 orderId,
                 HttpStatus.CREATED
         );
+    }
+
+
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderResponse> getOrderDetails(
+            @PathVariable long orderId
+    ) {
+        OrderResponse orderResponse =
+                orderService
+                        .getOrderDetails(orderId);
+        return new ResponseEntity<>(orderResponse, HttpStatus.OK);
     }
 }

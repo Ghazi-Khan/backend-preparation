@@ -1,13 +1,16 @@
 package com.silkroutestore.order.service;
 
 import com.silkroutestore.order.entity.Order;
+import com.silkroutestore.order.exception.CustomException;
 import com.silkroutestore.order.external.client.PaymentService;
 import com.silkroutestore.order.external.client.ProductService;
 import com.silkroutestore.order.external.request.PaymentRequest;
 import com.silkroutestore.order.model.OrderRequest;
+import com.silkroutestore.order.model.OrderResponse;
 import com.silkroutestore.order.repository.OrderRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -74,5 +77,25 @@ public class OrderServiceImpl implements OrderService {
 
         log.info("order placed successfully with order id: {}", order.getId());
         return order.getId();
+    }
+
+    @Override
+    public OrderResponse getOrderDetails(long orderId) {
+        Order order =
+                orderRepository
+                        .findById(orderId)
+                        .orElseThrow(() -> new CustomException(
+                                "Order not found with id: " + orderId,
+                                "ORDER_NOT_FOUND",
+                                HttpStatus.NOT_FOUND.value()
+                        ));
+        return
+                OrderResponse
+                        .builder()
+                        .orderId(order.getId())
+                        .orderDate(order.getOrderDate())
+                        .amount(order.getAmount())
+                        .orderStatus(order.getOrderStatus())
+                        .build();
     }
 }

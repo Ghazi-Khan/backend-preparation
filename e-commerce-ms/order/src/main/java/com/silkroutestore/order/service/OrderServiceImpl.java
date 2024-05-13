@@ -4,6 +4,7 @@ import com.silkroutestore.order.entity.Order;
 import com.silkroutestore.order.exception.CustomException;
 import com.silkroutestore.order.external.client.PaymentService;
 import com.silkroutestore.order.external.client.ProductService;
+import com.silkroutestore.order.external.reponse.PaymentResponse;
 import com.silkroutestore.order.external.reponse.ProductResponse;
 import com.silkroutestore.order.external.request.PaymentRequest;
 import com.silkroutestore.order.model.OrderRequest;
@@ -103,6 +104,15 @@ public class OrderServiceImpl implements OrderService {
                         ProductResponse.class
                 );
 
+        log.info("Getting payment details from payment-service with orderId {} : ", order.getId());
+
+        PaymentResponse paymentResponse =
+                restTemplate.getForObject(
+                        "http://PAYMENT-SERVICE/payment/order/" + order.getId(),
+                        PaymentResponse.class
+                );
+        log.info("Payment details are - {} ", paymentResponse);
+
         OrderResponse.ProductDetails productDetails =
                 OrderResponse
                         .ProductDetails
@@ -113,6 +123,17 @@ public class OrderServiceImpl implements OrderService {
                         .quantity(productResponse.getQuantity())
                         .build();
 
+        OrderResponse.PaymentDetails paymentDetails =
+                OrderResponse
+                        .PaymentDetails
+                        .builder()
+                        .paymentId(paymentResponse.getPaymentId())
+                        .paymentDate(paymentResponse.getPaymentDate())
+                        .status(paymentResponse.getStatus())
+                        .orderId(paymentResponse.getOrderId())
+                        .amount(paymentResponse.getAmount())
+                        .build();
+
         return
                 OrderResponse
                         .builder()
@@ -121,6 +142,7 @@ public class OrderServiceImpl implements OrderService {
                         .amount(order.getAmount())
                         .orderStatus(order.getOrderStatus())
                         .productDetails(productDetails)
+                        .paymentDetails(paymentDetails)
                         .build();
     }
 }
